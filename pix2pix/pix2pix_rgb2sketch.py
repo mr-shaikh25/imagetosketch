@@ -18,6 +18,7 @@ from keras.layers import BatchNormalization
 from keras.layers import LeakyReLU
 from matplotlib import pyplot
 from tensorflow.random import set_seed
+import os
 
 # define the discriminator model
 def define_discriminator(image_shape):
@@ -205,7 +206,7 @@ def summarize_performance(step, g_model, dataset, n_samples=3):
     print('>Saved: %s and %s' % (filename1, filename2))
 
 # train pix2pix models
-def train(d_model, g_model, gan_model, dataset, n_epochs=100, n_batch=64):
+def train(d_model, g_model, gan_model, dataset, n_epochs=100, n_batch=1):
     # determine the output square shape of the discriminator
     n_patch = d_model.output_shape[1]
     # unpack dataset
@@ -232,8 +233,10 @@ def train(d_model, g_model, gan_model, dataset, n_epochs=100, n_batch=64):
         if (i+1) % (bat_per_epo * 10) == 0:
             summarize_performance(i, g_model, dataset)
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+npz_path = os.path.abspath('../npz')
 # load image data
-dataset = load_real_samples(r"../npz/sketched_256.npz")
+dataset = load_real_samples(fr"{npz_path}/sketched_256_2023_07_26_21_50_10.npz")
 print('Loaded', dataset[0].shape, dataset[1].shape)
 # define input shape based on the loaded dataset
 image_shape = dataset[0].shape[1:]

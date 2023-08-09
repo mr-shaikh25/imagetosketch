@@ -59,10 +59,14 @@ def rgb2sketch(rgb, filter_kernel=7):
 
     return final_sketch.astype('uint8')
 
-for i in os.listdir(r"../images/"):
-    img = Image.open(fr"../images/{i}")
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+images_path = os.path.abspath('../images')
+dataset_path = os.path.abspath('../dataset')
+
+for i in os.listdir(images_path):
+    img = Image.open(fr"{images_path}/{i}")
     i = i.split('.')[0]
     sketch = rgb2sketch(img)
     sketch = cv.cvtColor(sketch, cv.COLOR_GRAY2RGB)
     merged = np.concatenate((np.asarray(img), sketch), axis=1)
-    cv.imwrite(fr"../source/{i}.png", cv.cvtColor(merged, cv.COLOR_RGB2BGR))
+    cv.imwrite(fr"{dataset_path}/{i}.png", cv.cvtColor(merged, cv.COLOR_RGB2BGR))

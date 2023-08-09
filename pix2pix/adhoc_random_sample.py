@@ -4,6 +4,7 @@ from numpy import load
 from numpy import vstack
 from matplotlib import pyplot
 from numpy.random import randint
+import os
 
 # load and prepare training images
 def load_real_samples(filename):
@@ -34,11 +35,14 @@ def plot_images(src_img, gen_img, tar_img):
         pyplot.title(titles[i])
     pyplot.show()
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+npz_path = os.path.abspath('../npz')
+
 # load dataset
-[X1, X2] = load_real_samples(r"../npz/sketched_256.npz")
+[X1, X2] = load_real_samples(fr"{npz_path}/sketched_256.npz")
 print('Loaded', X1.shape, X2.shape)
 # load model
-model = load_model(r"./*.h5")
+model = load_model("./model_40000.h5")
 # select random example
 ix = randint(0, len(X1), 1)
 src_image, tar_image = X1[ix], X2[ix]
